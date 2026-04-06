@@ -171,7 +171,7 @@ async function showStatus(): Promise<void> {
     console.log(`
   Last sync report: ${report.generatedAt}
   Stored records: ${report.totalStored.toLocaleString()}
-  Existing comparison ceiling: ${report.baselineCeiling.toLocaleString()}
+  ${report.baselineLabel}: ${report.baselineCeiling.toLocaleString()}
   Latest successful index: ${report.latestSuccessfulIndex ?? 'unknown'}
   Proof passed: ${report.proofPassed ? 'yes' : 'no'}
   Stop reason: ${report.stopReason}
@@ -332,8 +332,8 @@ async function runSyncCommand(options: {
   console.log(LOGO);
   showIntro();
   console.log(`
-  Reading Chrome cookies from:
-    ${options.chromeUserDataDir}/${options.chromeProfileDirectory}
+  Using Chrome profile:
+    ${options.chromeProfileDirectory}
 `);
 
   const cookies = extractChromeYoutubeCookies(options.chromeUserDataDir, options.chromeProfileDirectory);
@@ -355,17 +355,17 @@ async function runSyncCommand(options: {
   Liked page title: ${report.pageTitle}
   YouTube page header count: ${report.statedVideoCount ?? 'unknown'}
   Stored locally: ${report.totalStored.toLocaleString()}
-  Existing comparison ceiling: ${report.baselineCeiling.toLocaleString()}
+  ${report.baselineLabel}: ${report.baselineCeiling.toLocaleString()}
   Stop reason: ${report.stopReason}
 `);
 
   if (!report.proofPassed) {
     console.log(`
-  Full-history proof failed.
+  Web history plateaued.
 
   ytl saved the records it could reach from the current YouTube web
-  surfaces, but strict YouTube-only sync did not beat the current wall
-  on this machine. See the saved sync report for the exact stop reasons.
+  surfaces, but YouTube stopped exposing more history before a full
+  backfill. See the saved sync report for the exact stop reasons.
 `);
     process.exitCode = 1;
     return;

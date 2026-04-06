@@ -9,6 +9,7 @@ interface MetaFile {
   proofPassed: boolean;
   winningMethod: SyncReport['winningMethod'];
   baselineCeiling: number;
+  baselineLabel: string;
   latestSuccessfulIndex: number | null;
 }
 
@@ -21,6 +22,7 @@ export function saveSyncReport(report: SyncReport): void {
     proofPassed: report.proofPassed,
     winningMethod: report.winningMethod,
     baselineCeiling: report.baselineCeiling,
+    baselineLabel: report.baselineLabel,
     latestSuccessfulIndex: report.latestSuccessfulIndex,
   };
 

@@ -41,6 +41,7 @@ export interface SyncReport {
   statedVideoCount: number | null;
   alertMessages: string[];
   baselineCeiling: number;
+  baselineLabel: string;
   proofPassed: boolean;
   winningMethod: SyncCaptureMethod | null;
   totalStored: number;

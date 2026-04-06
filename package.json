@@ -1,6 +1,6 @@
 {
   "name": "yt-liked",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0-alpha.2",
   "description": "A macOS-first CLI that syncs YouTube liked videos from Chrome, then searches and classifies them locally.",
   "type": "module",
   "bin": {

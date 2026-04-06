@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer-core';
 import { buildIndex } from './videos-db.js';
 import { mergeArchiveRecords } from './videos-import.js';
 import { backfillStatePath, ensureDataDir, syncDebugDirPath } from './paths.js';
-import { saveSyncReport } from './report.js';
+import { readSyncReport, saveSyncReport } from './report.js';
 import type { SyncCaptureMethod, SyncMethodReport, SyncReport, VideoRecord, YtBootstrapConfig, YtBootstrapPayload } from './types.js';
 import { createSapisidAuthHeader } from './youtube-web.js';
 
@@ -694,7 +694,10 @@ export async function runYouTubeSync(options: SyncOptions): Promise<SyncReport> 
   ensureDataDir();
   const importedAt = new Date().toISOString();
   const bootstrapDoc = await fetchBootstrapDocument(options.cookieHeader);
-  const baselineCeiling = Math.max(bootstrapDoc.payload.statedVideoCount ?? 0, 4953);
+  const previousReport = readSyncReport();
+  const previousStored = previousReport?.totalStored ?? 0;
+  const baselineCeiling = previousStored > 0 ? previousStored : 4953;
+  const baselineLabel = previousStored > 0 ? 'Previous local ceiling' : 'Known wall target';
   const debugDir = options.debugNetwork
     ? path.join(syncDebugDirPath(), importedAt.replace(/[:.]/g, '-'))
     : null;
@@ -737,13 +740,14 @@ export async function runYouTubeSync(options: SyncOptions): Promise<SyncReport> 
     statedVideoCount: bootstrapDoc.payload.statedVideoCount,
     alertMessages: bootstrapDoc.payload.alerts,
     baselineCeiling,
+    baselineLabel,
     proofPassed: Boolean(winner),
     winningMethod: winner?.method ?? null,
     totalStored,
     latestSuccessfulIndex,
     stopReason: winner
-      ? `${winner.method} beat the baseline ceiling`
-      : 'strict youtube web sync did not beat the current baseline ceiling',
+      ? `${winner.method} beat the target ceiling`
+      : 'youtube web history plateaued before the target ceiling',
     methods,
     debugArtifacts: context.debugArtifacts,
   };
