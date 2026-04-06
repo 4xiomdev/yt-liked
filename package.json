@@ -1,0 +1,48 @@
+{
+  "name": "yt-liked",
+  "version": "0.2.0-alpha.0",
+  "description": "A macOS-first CLI that syncs YouTube liked videos from Chrome, then searches and classifies them locally.",
+  "type": "module",
+  "bin": {
+    "ytl": "bin/ytl.mjs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "test": "tsx --test tests/*.test.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "keywords": [
+    "youtube",
+    "likes",
+    "cli",
+    "local-first",
+    "chrome",
+    "self-custody"
+  ],
+  "dependencies": {
+    "@google/genai": "^1.48.0",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.0",
+    "puppeteer-core": "^24.26.1",
+    "sql.js": "^1.14.1",
+    "sql.js-fts5": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/sql.js": "^1.4.11",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.3"
+  }
+}
